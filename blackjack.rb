@@ -59,8 +59,6 @@ class Hand
         @hand_value += card.value
       end
 
-
-
     if @hand_value < 12 && has_ace?
       @hand_value += 10
     else
@@ -71,22 +69,22 @@ class Hand
 
   def has_ace?
     @cards_in_hand.each do |card|
-    if card.face_value == :A
-      return true
-    else
-      return false
-    end 
-  end
-  
-  def busted?
-    if value > 21
-      return true
-    else
-      return false
+      if card.face_value == :A
+        return true
+      else
+        return false
+      end 
     end
   end
-end
-end
+  def busted?
+      if value > 21
+        return true
+      else
+        return false
+      end
+    end
+  end
+
 
 
 
