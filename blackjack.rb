@@ -1,5 +1,5 @@
 class Card
-  attr_reader :face_value
+  attr_reader :face_value, :suit
   def initialize value, suit
     @value = value
     @suit = suit
@@ -66,7 +66,6 @@ class Hand
     end
   end
 
-
   def has_ace?
     @cards_in_hand.each do |card|
       if card.face_value == :A
@@ -76,15 +75,38 @@ class Hand
       end 
     end
   end
+  
   def busted?
-      if value > 21
-        return true
-      else
-        return false
-      end
+    if value > 21
+      return true
+    else
+      return false
     end
   end
 
+    def blackjack?
+    @card_values = []
+    @cards_in_hand.each do |card|
+      @card_values.push(card.value)
+    end
+    if @card_values.include?(1) && @card_values.include?(10)
+      return true
+    else
+      false
+    end
+  end
+
+  def to_s
+    @string_array = []
+    @cards_in_hand.each do |card|
+      @string_array.push(card.face_value.to_s,card.suit.to_s)
+    end
+    @string_array = @string_array.each_slice(2).map { |a| a.join }
+    @string_array.join(", ")
+  end
+end
+
+  
 
 
 
