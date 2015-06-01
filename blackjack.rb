@@ -1,27 +1,43 @@
+require 'pry'
+
+class Player
+  attr_reader :name
+  
+  def initialize name
+    @name = name
+    @player_won = false
+  end
+
+end
+
 class Card
   attr_reader :face_value, :suit
   def initialize value, suit
-    @value = value
-    @suit = suit
-    @face_value = value
+   @value = value
+   @suit = suit
+   @face_value = value
   end
-  
   def value
     if @value == :K || @value == :Q || @value == :J
-      10
+      return 10
     elsif @value == :A
       return 1
     else
-      @value 
+      @value
     end
+  end
+
+  def to_s
+    return "#{@face_value}#{@suit}"
   end
 end
 
 class Deck
+attr_reader :cards, :drawn
   def initialize
     @drawn = []
-    @cards = []
     @suits = [:S,:C,:D,:H]
+    @cards = []
     @card_values = [:A,2,3,4,5,6,7,8,9,10,:J,:Q,:K]
     @suits.each do |suit|
       @card_values.each do |value|
@@ -29,24 +45,25 @@ class Deck
         @cards.push(card)
       end
     end
+    @cards.shuffle!
   end
-  attr_reader :cards
+ 
 
   def draw
     c = @cards.pop
     @drawn.push(c)
-   return c
+    return c
   end
-
-  attr_reader :drawn
 end
 
 class Hand
-  attr_reader :hand_value
+  attr_accessor :stand
+
   def initialize
     @cards_in_hand = []
+    @stand = false
   end
-  
+
   def add *cards
     cards.each do |card|
       @cards_in_hand.push(card)
@@ -56,10 +73,9 @@ class Hand
   def value
     @hand_value = 0
     @cards_in_hand.each do |card|
-        @hand_value += card.value
-      end
-
-    if @hand_value < 12 && has_ace?
+      @hand_value += card.value
+    end
+    if @hand_value < 12 && has_ace? 
       @hand_value += 10
     else
       @hand_value
@@ -67,24 +83,16 @@ class Hand
   end
 
   def has_ace?
-    @cards_in_hand.each do |card|
-      if card.face_value == :A
-        return true
-      else
-        return false
-      end 
-    end
-  end
-  
-  def busted?
-    if value > 21
-      return true
-    else
-      return false
-    end
+    @cards_in_hand.any? do |card|
+      card.face_value == :A
+     end
   end
 
-    def blackjack?
+  def busted?
+    value > 21
+  end
+
+  def blackjack?
     @card_values = []
     @cards_in_hand.each do |card|
       @card_values.push(card.value)
@@ -97,13 +105,10 @@ class Hand
   end
 
   def to_s
-    @string_array = []
-    @cards_in_hand.each do |card|
-      @string_array.push(card.face_value.to_s,card.suit.to_s)
-    end
-    @string_array = @string_array.each_slice(2).map { |a| a.join }
-    @string_array.join(", ")
+    @cards = @cards_in_hand
+    @cards.map { |card| card.to_s }.join(", ")
   end
+
 end
 
   
